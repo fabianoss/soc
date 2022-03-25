@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+    "http://struts.apache.org/dtds/struts-2.5.dtd">
+
+<struts>
+
+	<constant name="struts.devMode" value="true" />
+	<constant name="struts.ui.theme" value="simple" />
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.custom.i18n.resources" value="ApplicationResources" />
+
+	<package name="br.com.soc.sistema" extends="struts-default" strict-method-invocation="false">
+
+		<interceptors>
+			<interceptor name="authentication" class="br.com.soc.sistema.interceptors.AuthenticationInterceptor"></interceptor>
+			<interceptor-stack name="authStack">
+				<interceptor-ref name="authentication"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+
+		<default-interceptor-ref name="authStack"></default-interceptor-ref>
+
+		<global-results>
+			<result name="login" type="redirect">/home.action</result>
+		</global-results>
+
+		<action name="home">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result>/login/login.jsp</result>
+		</action>
+
+		<action name="login" class="br.com.soc.sistema.action.login.LoginAction">
+			<interceptor-ref name="defaultStack"></interceptor-ref>
+			<result name="success">/index.jsp</result>
+			<result name="input">/login/login.jsp</result>
+		</action>
+
+		<action name="*Exames" class="br.com.soc.sistema.action.exame.ExameAction" method="{1}">
+			<result name="success">/exame/cadExame_b.jsp</result>
+			<result name="input">/exame/cadExame_i.jsp</result>
+			<result name="atualizar">/exame/cadExame_u.jsp</result>
+			<result name="redirect" type="redirectAction">todosExames</result>
+		</action>
+
+		<action name="index" class="br.com.soc.sistema.action.login.LoginAction" method="index">
+			<result name="success">/index.jsp</result>
+		</action>
+
+		<action name="*Funcionarios" class="br.com.soc.sistema.action.funcionario.FuncionarioAction" method="{1}">
+			<result name="success">/funcionario/funcionario_b.jsp</result>
+			<result name="input">/funcionario/funcionario_i.jsp</result>
+			<result name="atualizar">/funcionario/funcionario_u.jsp</result>
+			<result name="redirect" type="redirectAction">todosFuncionarios</result>
+		</action>
+		
+		<action name="*Cadastro" class="br.com.soc.sistema.action.exame.FuncionarioExameAction" method="{1}">
+			<result name="success">/exame/cadFuncionarioExame_b.jsp</result>
+			<result name="input">/exame/cadFuncionarioExame_i.jsp</result>
+			<result name="atualizar">/exame/cadFuncionarioExame_u.jsp</result>
+			<result name="redirect" type="redirectAction">todosCadastro</result>
+		</action>
+		
+		<action name="*Relatorio" class="br.com.soc.sistema.action.relatorio.RelatorioAction" method="{1}">
+			<result name="success">/relatorio/relatorio.jsp</result>			
+			<result name="redirect" type="redirectAction">indexRelatorio</result>
+		</action>
+		
+		<action name="pesquisarRelatorio" class="br.com.soc.sistema.action.relatorio.RelatorioAction" method="pesquisar">
+			<result name="success">/relatorio/relatorio.jsp</result>			
+			<result name="redirect" type="redirectAction">indexRelatorio</result>
+		</action>
+
+	</package>
+
+</struts>
